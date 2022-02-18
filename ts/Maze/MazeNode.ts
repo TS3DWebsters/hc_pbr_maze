@@ -2,57 +2,77 @@
 
 class MazeNode
 {
-    private _coordinates : Communicator.Point2;
-    private _leftRelation : MazeNodeRelationSlot;
-    private _upRelation : MazeNodeRelationSlot;
-    private _downRelation : MazeNodeRelationSlot;
-    private _rightRelation : MazeNodeRelationSlot;
+    private _coordinates: Communicator.Point2;
+    private _neighbors: Map<Direction, MazeNode | null> = new Map();
+    private _accessability: Map<Direction, boolean>;
     
     constructor(coordinates : Communicator.Point2){
-        this._coordinates = coordinates;
-        this._leftRelation = new MazeNodeRelationSlot();
-        this._upRelation = new MazeNodeRelationSlot();
-        this._downRelation = new MazeNodeRelationSlot();
-        this._rightRelation = new MazeNodeRelationSlot();
-   }
-
+        this._coordinates = coordinates.copy();
+        this._accessability = new Map([
+            [Direction.Up, false],
+            [Direction.Down, false],
+            [Direction.Left, false],
+            [Direction.Right, false]
+        ]);
+    }
+    
     public x() : number{
         return this._coordinates.x;
     }
-
+    
     public y() : number{
         return this._coordinates.y;
     }
-
-    public setLeftRelation(relation : MazeNodeRelation, index : MazeNodeIndex) : void {
-        this._leftRelation.set(relation, index);
-    }
-
-    public setRightRelation(relation : MazeNodeRelation, index : MazeNodeIndex) : void{
-        this._rightRelation.set(relation, index);
-    }
-
-    public setUpRelation(relation : MazeNodeRelation, index : MazeNodeIndex) : void{
-        this._upRelation.set(relation, index);
-    }
-
-    public setDownRelation(relation : MazeNodeRelation, index : MazeNodeIndex) : void{
-        this._downRelation.set(relation, index);
-    }
-
-    public getLeftRelation() : MazeNodeRelationSlot{
-        return this._leftRelation;
-    }
-
-    public getRightRelation() : MazeNodeRelationSlot{
-        return this._rightRelation;
+    
+    public setNeighbor(dir: Direction, cell: MazeNode | null) {
+        this._neighbors.set(dir, cell)
     }
     
-    public getUpRelation() : MazeNodeRelationSlot{
-        return this._upRelation;
+    public getNeighbor(dir: Direction): MazeNode | null {
+        const neighbor = this._neighbors.get(dir);
+        if(neighbor === undefined || neighbor === null) {
+            return null;
+        }
+        return neighbor;
     }
     
-    public getDownRelation() : MazeNodeRelationSlot{
-        return this._downRelation;
+    public setAccessibility(dir: Direction, access: boolean) {
+        this._accessability.set(dir, access);
+    }
+    
+    public getAccessibility(dir: Direction): boolean {
+        const access = this._accessability.get(dir);
+        if(access === undefined) {
+            throw "Failed to get access";
+        }
+        return access;
+    }
+    
+    public isEdgeCell(): boolean {
+        let n_neighbors = 0;
+        this._neighbors.forEach((neighbor) => {
+            if(neighbor !== null) {
+                n_neighbors++;
+            }
+        });
+        return n_neighbors !== 4;
+    }
+    
+    public isConnected(): boolean {
+        let n_branches = 0;
+        this._accessability.forEach((accessible) => {
+            if(accessible) {
+                n_branches++;
+            }
+        });
+        return n_branches !== 0;
+    }
+    
+    public isBranchable(): boolean {
+        // Only branch into nodes that aren't edge_nodes and that can't be gotten to yet
+        if(this.isConnected()) {
+            return false;
+        }
+        return true;
     }
 }
