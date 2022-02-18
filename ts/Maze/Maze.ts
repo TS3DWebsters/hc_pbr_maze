@@ -78,10 +78,8 @@ class Maze {
       throw "Did not get edge cell";
     }
 
-    if(cell.isConnected()) {
-      // try again
-      return this.pickStartOrEnd()
-    } 
+    cell.setAccessibility(direction, true);
+
     return cell
   }
   
@@ -91,8 +89,8 @@ class Maze {
     let generation_start = this.getNodeAtCoord(start_x, start_y) as MazeNode;
     
     this.branch(generation_start); // creates center maze
-    //this._startCell = this.pickStartOrEnd();
-    //this._endCell = this.pickStartOrEnd();
+    this._startCell = this.pickStartOrEnd();
+    this._endCell = this.pickStartOrEnd();
   }
   
   public getRowCount(): number {
