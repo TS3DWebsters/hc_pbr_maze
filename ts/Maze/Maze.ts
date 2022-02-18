@@ -18,6 +18,9 @@ class Maze {
       }
       this._cells.push(row);
     }
+
+    this.linkAllCells();
+    this.generate();
   }
   
   public linkAllCells() {
@@ -32,11 +35,6 @@ class Maze {
         cell.setNeighbor(Direction.Down,  this.getCell(x, y - 1));
         cell.setNeighbor(Direction.Left,  this.getCell(x - 1, y));
         cell.setNeighbor(Direction.Right, this.getCell(x + 1, y));
-        
-        cell.setAccessibility(Direction.Up, false);
-        cell.setAccessibility(Direction.Down, false);
-        cell.setAccessibility(Direction.Left, false);
-        cell.setAccessibility(Direction.Right, false);
       }
     }
   }
@@ -61,8 +59,37 @@ class Maze {
     }
   }
 
-  public pickStartOrEnd() {
+  public pickStartOrEnd(): MazeNode {
+    let x = randint(this._rowCount - 2) + 1
+    let y = randint(this._rowCount - 2) + 1
+    const directions = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
+    shuffleArray(directions)
+    const direction = directions[0]
+    switch(direction) {
+      case Direction.Up: 
+        y = 0;
+        break;
+      case Direction.Down:
+        y = this._rowCount - 1;
+        break;
+      case Direction.Left:
+        x = 0;
+        break;
+      case Direction.Right:
+        x = this._colCount - 1;
+        break;
+    }
 
+    const cell = this.getCell(x, y);
+    if(cell === null || !cell.isEdgeCell()) {
+      throw "Did not get edge cell";
+    }
+
+    if(cell.isConnected()) {
+      // try again
+      return this.pickStartOrEnd()
+    } 
+    return cell
   }
   
   public generate() {
@@ -71,8 +98,8 @@ class Maze {
     let generation_start = this.getCell(start_x, start_y) as MazeNode;
     
     this.branch(generation_start); // creates center maze
-    this._startCell = this.pick_start_or_end();
-    this._endCell = this.pick_start_or_end();
+    this._startCell = this.pickStartOrEnd();
+    this._endCell = this.pickStartOrEnd();
   }
   
   public getRowCount(): number {

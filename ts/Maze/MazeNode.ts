@@ -4,10 +4,16 @@ class MazeNode
 {
     private _coordinates = Communicator.Point2;
     private _neighbors: Map<Direction, MazeNode | null> = new Map();
-    private _accessability: Map<Direction, boolean> = new Map();
+    private _accessability: Map<Direction, boolean>;
     
     constructor(coordinates : Communicator.Point2){
         this._coordinates = coordinates;
+        this._accessability = new Map([
+            [Direction.Up, false],
+            [Direction.Down, false],
+            [Direction.Left, false],
+            [Direction.Right, false]
+        ]);
     }
     
     public x() : number{
@@ -52,19 +58,21 @@ class MazeNode
         return n_neighbors !== 4;
     }
     
-    
-    public isBranchable(): boolean {
-        // Only branch into nodes that aren't edge_nodes and that can't be gotten to yet
-        if(this.isEdgeCell()) {
-            return false;
-        }
-        
+    public isConnected(): boolean {
         let n_branches = 0;
         this._accessability.forEach((accessible) => {
             if(accessible) {
                 n_branches++;
             }
         });
-        return n_branches === 0;
+        return n_branches !== 0;
+    }
+    
+    public isBranchable(): boolean {
+        // Only branch into nodes that aren't edge_nodes and that can't be gotten to yet
+        if(this.isEdgeCell() || this.isConnected()) {
+            return false;
+        }
+        return true;
     }
 }
