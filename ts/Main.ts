@@ -19,7 +19,7 @@ class Main {
           this._hwv.view.setBackgroundColor(Communicator.Color.blue(), Communicator.Color.white());
           this._initResizeEventHandler();
 
-          this._maze = new Maze(20, 20);
+          this._maze = new Maze(30, 20);
           MazeRenderer.createMazeMesh(this._maze, this._hwv, this._hwv.model.getAbsoluteRootNode());
         },
       selectionArray: (selectionEvents:Communicator.Event.NodeSelectionEvent[]) => {

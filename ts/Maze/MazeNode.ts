@@ -2,12 +2,12 @@
 
 class MazeNode
 {
-    private _coordinates = Communicator.Point2;
+    private _coordinates: Communicator.Point2;
     private _neighbors: Map<Direction, MazeNode | null> = new Map();
     private _accessability: Map<Direction, boolean>;
     
     constructor(coordinates : Communicator.Point2){
-        this._coordinates = coordinates;
+        this._coordinates = coordinates.copy();
         this._accessability = new Map([
             [Direction.Up, false],
             [Direction.Down, false],
@@ -30,7 +30,7 @@ class MazeNode
     
     public getNeighbor(dir: Direction): MazeNode | null {
         const neighbor = this._neighbors.get(dir);
-        if(neighbor === undefined) {
+        if(neighbor === undefined || neighbor === null) {
             return null;
         }
         return neighbor;
@@ -43,7 +43,7 @@ class MazeNode
     public getAccessibility(dir: Direction): boolean {
         const access = this._accessability.get(dir);
         if(access === undefined) {
-            return false;
+            throw "Failed to get access";
         }
         return access;
     }
@@ -51,7 +51,7 @@ class MazeNode
     public isEdgeCell(): boolean {
         let n_neighbors = 0;
         this._neighbors.forEach((neighbor) => {
-            if(neighbor !== undefined) {
+            if(neighbor !== null) {
                 n_neighbors++;
             }
         });
@@ -70,7 +70,7 @@ class MazeNode
     
     public isBranchable(): boolean {
         // Only branch into nodes that aren't edge_nodes and that can't be gotten to yet
-        if(this.isEdgeCell() || this.isConnected()) {
+        if(this.isConnected()) {
             return false;
         }
         return true;

@@ -1,8 +1,8 @@
 class Maze {
   // Note : (0,0) is bottom left, first rows then columns
   private _cells: MazeNode[][];
-  private _startCell: MazeNode;
-  private _endCell: MazeNode;
+  private _startCell: MazeNode | null = null;
+  private _endCell: MazeNode | null = null;
   private _colCount: number;
   private _rowCount: number;
   
@@ -26,24 +26,17 @@ class Maze {
   public linkAllCells() {
     for(let y = 0; y < this._rowCount; y++) {
       for(let x = 0; x < this._colCount; x++) {
-        const cell = this.getCell(x, y);
+        const cell = this.getNodeAtCoord(x, y);
         if(cell === null) { 
           throw "Couldn't get cell during cell linking";
         }
         
-        cell.setNeighbor(Direction.Up,    this.getCell(x, y + 1));
-        cell.setNeighbor(Direction.Down,  this.getCell(x, y - 1));
-        cell.setNeighbor(Direction.Left,  this.getCell(x - 1, y));
-        cell.setNeighbor(Direction.Right, this.getCell(x + 1, y));
+        cell.setNeighbor(Direction.Up,    this.getNodeAtCoord(x, y - 1));
+        cell.setNeighbor(Direction.Down,  this.getNodeAtCoord(x, y + 1));
+        cell.setNeighbor(Direction.Left,  this.getNodeAtCoord(x - 1, y));
+        cell.setNeighbor(Direction.Right, this.getNodeAtCoord(x + 1, y));
       }
     }
-  }
-  
-  public getCell(x: number, y: number): MazeNode | null {
-    if(x > 0 || y < 0 || y >= this._rowCount || x >= this._colCount) {
-      return null;
-    }
-    return this._cells[y][x];
   }
   
   public branch = (cell: MazeNode) => {
@@ -60,7 +53,7 @@ class Maze {
   }
 
   public pickStartOrEnd(): MazeNode {
-    let x = randint(this._rowCount - 2) + 1
+    let x = randint(this._colCount - 2) + 1
     let y = randint(this._rowCount - 2) + 1
     const directions = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
     shuffleArray(directions)
@@ -80,7 +73,7 @@ class Maze {
         break;
     }
 
-    const cell = this.getCell(x, y);
+    const cell = this.getNodeAtCoord(x, y);
     if(cell === null || !cell.isEdgeCell()) {
       throw "Did not get edge cell";
     }
@@ -95,11 +88,11 @@ class Maze {
   public generate() {
     const start_y = randint(this._rowCount - 2) + 1;
     const start_x = randint(this._colCount - 2) + 1;
-    let generation_start = this.getCell(start_x, start_y) as MazeNode;
+    let generation_start = this.getNodeAtCoord(start_x, start_y) as MazeNode;
     
     this.branch(generation_start); // creates center maze
-    this._startCell = this.pickStartOrEnd();
-    this._endCell = this.pickStartOrEnd();
+    //this._startCell = this.pickStartOrEnd();
+    //this._endCell = this.pickStartOrEnd();
   }
   
   public getRowCount(): number {
@@ -118,5 +111,19 @@ class Maze {
     }
     
     return node;
+  }
+
+  public getStartNode(): MazeNode {
+    if(!this._startCell) {
+      throw "Start cell not initialized";
+    }
+    return this._startCell;
+  }
+
+  public getEndNode(): MazeNode {
+    if(!this._endCell) {
+      throw "End cell not initialized";
+    }
+    return this._endCell;
   }
 }
