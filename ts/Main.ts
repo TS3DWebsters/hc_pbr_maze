@@ -1,8 +1,9 @@
-/// <reference path="hoops_web_viewer.d.ts" />
+/// <reference path="HWV/hoops_web_viewer.d.ts" />
 
 class Main {
   private _containerId: string;
   private _hwv: Communicator.WebViewer;
+  private _maze: Maze | null;
 
   constructor() {
     this._containerId = "viewer";
@@ -11,12 +12,21 @@ class Main {
       containerId: this._containerId,
     });
 
+    this._maze = null;
+
     this._hwv.setCallbacks({
       sceneReady: () => {
           this._hwv.view.setBackgroundColor(Communicator.Color.blue(), Communicator.Color.white());
           this._initResizeEventHandler();
 
-          this._hwv.model.loadSubtreeFromScsFile(this._hwv.model.getAbsoluteRootNode(), "data/models/floor.scs");
+          this._maze = MazeGenerator.generateHardcoded();
+          MazeRenderer.createMazeMesh(this._maze, this._hwv, this._hwv.model.getAbsoluteRootNode());
+        },
+      selectionArray: (selectionEvents:Communicator.Event.NodeSelectionEvent[]) => {
+        const selectionIds = selectionEvents.map(sEvent => sEvent.getSelection().getNodeId());
+        for(let selectionId in selectionIds){
+          console.log(">>>> " + selectionId);
+        }
       },
     });
 

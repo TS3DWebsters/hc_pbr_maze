@@ -1,0 +1,5 @@
+enum MazeNodeIndex
+{
+    First,
+    Second
+}
