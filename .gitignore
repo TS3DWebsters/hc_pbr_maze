@@ -1,2 +1,6 @@
 node_modules/
 *.blend1
+/js/hcpbrmaze.d.ts
+/js/hcpbrmaze.d.ts.map
+/js/hcpbrmaze.js
+/js/hcpbrmaze.js.map
