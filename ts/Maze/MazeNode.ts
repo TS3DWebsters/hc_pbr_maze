@@ -75,4 +75,12 @@ class MazeNode
         }
         return true;
     }
+
+    public getWorld3dCenter() : Communicator.Point3{
+        let centerX = this._coordinates.x * CELL_SIZE + CELL_SIZE * 0.5;
+        let centerY = CELL_HEIGHT * 0.5;
+        let centerZ = this._coordinates.y * CELL_SIZE + CELL_SIZE * 0.5;
+        
+        return new Communicator.Point3(centerX, centerY, centerZ);
+    }
 }

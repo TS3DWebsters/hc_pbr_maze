@@ -1,8 +1,17 @@
+const CELL_SIZE : number = 3;
+const CELL_HEIGHT : number = 2.5;
+
 enum Direction {
-    Up,
+    Up = 0,
     Down,
     Left,
-    Right
+    Right,
+    Count
+}
+
+enum CameraMovementType{
+    Walk,
+    Rotate
 }
 
 function inverseDirection(dir: Direction): Direction {
@@ -12,6 +21,7 @@ function inverseDirection(dir: Direction): Direction {
         case Direction.Left:  return Direction.Right;
         case Direction.Right: return Direction.Left;
     }
+    return Direction.Count;
 }
 
 function randint(max: number): number {

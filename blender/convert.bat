@@ -4,6 +4,12 @@ set CONVERTER_EXE="C:\Work\Releases\HOOPS_Communicator_2022_Windows\HOOPS_Commun
 
 %CONVERTER_EXE% --input "floor.glb" --output_scs "..\data\models\floor.scs" --license %CONVERTER_LICENSE_KEY%
 %CONVERTER_EXE% --input "wall_straight.glb" --output_scs "..\data\models\wall_straight.scs" --license %CONVERTER_LICENSE_KEY%
+%CONVERTER_EXE% --input "ceil.glb" --output_scs "..\data\models\ceil.scs" --license %CONVERTER_LICENSE_KEY%
+%CONVERTER_EXE% --input "wall_junction1.glb" --output_scs "..\data\models\wall_junction1.scs" --license %CONVERTER_LICENSE_KEY%
+%CONVERTER_EXE% --input "wall_junction2.glb" --output_scs "..\data\models\wall_junction2.scs" --license %CONVERTER_LICENSE_KEY%
+%CONVERTER_EXE% --input "wall_junction3.glb" --output_scs "..\data\models\wall_junction3.scs" --license %CONVERTER_LICENSE_KEY%
+%CONVERTER_EXE% --input "wall_junction4.glb" --output_scs "..\data\models\wall_junction4.scs" --license %CONVERTER_LICENSE_KEY%
+%CONVERTER_EXE% --input "wall_junction2_corner.glb" --output_scs "..\data\models\wall_junction2_corner.scs" --license %CONVERTER_LICENSE_KEY%
 
 
 :: --output_png
