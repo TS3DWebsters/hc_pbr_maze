@@ -12,36 +12,54 @@
 
 </head>
 <style>
-    #playbtn {
-        display: flex;
+    .floating-button {
+        position: fixed;
+        bottom: 10%;
+        left: 100px;
+        text-align: center;
+    }
+    
+    .floating-button .playbutton {
         width: 48px;
         height: 48px;
+        background: url(icons8-play-48.png);
+        background-repeat: no-repeat;
+        background-color: aqua;
+        cursor: pointer;
     }
     
     #playbackrt {
         display: flex;
         flex-direction: column;
-        justify-content: baseline;
+        justify-content: center;
         align-items: center;
+        position: absolute;
+        left: 200px;
+        bottom: 10%;
+        cursor: pointer;
+        ;
     }
 </style>
 
 <body>
     <div id="playbackrt">
         <div>
-            <input value="1" id="range" type="range" min="1" max="4" step="1">
+            <input value="1" id="range" type="range" min="1" max="4" step="1" value="1">
             <label for="Playback speed"></label>
         </div>
         <div id="current">1
         </div>
     </div>
     <div id="viewer"></div>
-    <button onclinck=Play() id="playbtn"></button>
 
+    <div class="floating-button" ;>
+        <div class="playbutton">
+            <button onclinck=Play() class="playbutton"></button>
+        </div>
+    </div>
     <script>
-        var butn = document.getElementById("playbtn");
+        var butn = document.getElementsByClassName("playbutton");
         var playback = document.getElementById("<<placeholder for videoid>>")
-        butn.style.background = "url(icons8-play-48.png)"
 
         function Play() {
             if (playback.paused) {
@@ -51,7 +69,11 @@
                 playback.pause();
             butn.style.background = "url(icons8-play-48.png)"
         }
-        
+        document.getElementById("playbackrt").addEventListener("input", function(event) {
+            let value = event.target.value;
+            document.getElementById("current").innerText = value;
+            document.getElementById("current").classList.add("active");
+        })
     </script>
 
 </body>
