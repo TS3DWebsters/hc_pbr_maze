@@ -43,7 +43,7 @@ class MazeRenderer {
       
       const sandColorImageId : Communicator.ImageId = await MazeRenderer.loadImage(viewer, "data/textures/sand_color.jpg");
       const brickColorImageId : Communicator.ImageId = await MazeRenderer.loadImage(viewer, "data/textures/brick_color.jpg");
-      const ceilColorImageId : Communicator.ImageId = await MazeRenderer.loadImage(viewer, "data/textures/ceil_color.jpg");
+      //const ceilColorImageId : Communicator.ImageId = await MazeRenderer.loadImage(viewer, "data/textures/ceil_color.jpg");
       
       let meshesRootNodeId = viewer.model.createNode(rootNodeId, "MeshesRoot");
       
@@ -113,7 +113,7 @@ class MazeRenderer {
       for (let rowIndex: number = 0; rowIndex < maze.getRowCount(); ++rowIndex) {
         for (let colIndex: number = 0; colIndex < maze.getColCount(); ++colIndex) {
           MazeRenderer._instanciate(viewer, floorTileMeshIds[0], CELL_SIZE * colIndex, 0, CELL_SIZE * rowIndex, 0, sandColorImageId);
-          MazeRenderer._instanciate(viewer, ceilTileMeshIds[0], CELL_SIZE * colIndex, CELL_HEIGHT, CELL_SIZE * rowIndex, 0, ceilColorImageId)
+          //MazeRenderer._instanciate(viewer, ceilTileMeshIds[0], CELL_SIZE * colIndex, CELL_HEIGHT, CELL_SIZE * rowIndex, 0, ceilColorImageId)
         }
       }
       

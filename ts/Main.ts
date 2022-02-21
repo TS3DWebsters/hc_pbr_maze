@@ -4,7 +4,6 @@ class Main {
   private _containerId: string;
   private _hwv: Communicator.WebViewer;
   private _maze: Maze | null;
-  //private _cameraController: CameraController | null;
 
   constructor() {
     this._containerId = "viewer";
@@ -14,7 +13,6 @@ class Main {
     });
 
     this._maze = null;
-    //this._cameraController = null;
 
     this._hwv.setCallbacks({
       sceneReady: () => {
@@ -22,27 +20,21 @@ class Main {
           this._hwv.view.getNavCube().enable();
           this._initResizeEventHandler();
 
-          /*this._hwv.operatorManager.clear();
-          this._hwv.operatorManager.push(Communicator.OperatorId.KeyboardWalk);
-          let operator = this._hwv.operatorManager.getOperator(Communicator.OperatorId.KeyboardWalk);
-          operator.setWalkSpeed(50.0);
-          operator.setZoomSpeed(50.0);*/
-
           this._hwv.view.clearLights();
 
-          this._maze = new Maze(30, 20);
-          MazeRenderer.createMazeMesh(this._maze, this._hwv, this._hwv.model.getAbsoluteRootNode());
-        
-          let startNode = this._maze.getStartNode();
-          let startPosition = startNode.getWorld3dCenter();
+          this._hwv.operatorManager.clear();
+          this._hwv.operatorManager.push(Communicator.OperatorId.Orbit);
+          this._hwv.operatorManager.push(Communicator.OperatorId.Zoom);
+          this._hwv.operatorManager.push(Communicator.OperatorId.Pan);
+          
+          this._maze = new Maze(50, 30);
 
-          let camera = this._hwv.view.getCamera();
-          camera.setTarget(new Communicator.Point3(0, 0, 1));
-          camera.setPosition(startPosition);
+          let camera : Communicator.Camera = this._hwv.view.getCamera();
+          camera.setNearLimit(0.1);
+          camera.setPosition(new Communicator.Point3(0, 500, 500));
           this._hwv.view.setCamera(camera);
 
-          //this._cameraController = new CameraController(this._hwv.view.getCamera(), this._maze);
-          //this._cameraController.run();
+          MazeRenderer.createMazeMesh(this._maze, this._hwv, this._hwv.model.getAbsoluteRootNode());
         },
     });
 

@@ -2,7 +2,7 @@ const CELL_SIZE : number = 3;
 const CELL_HEIGHT : number = 2.5;
 
 enum Direction {
-    Up = 0,
+    Up,
     Down,
     Left,
     Right,
